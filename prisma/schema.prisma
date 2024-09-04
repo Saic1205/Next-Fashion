@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Garment {
+  id         Int           @id @default(autoincrement())
+  url        String
+  url2       String
+  name       String
+  price      Decimal       @db.Decimal(10, 2)
+  sale_price Decimal?      @db.Decimal(10, 2)
+  status     ProductStatus
+  sale       Boolean
+  collection String
+  designer   String
+  category   String
+  color      String
+  size       String
+  brand      String
+  material   String?
+  createdAt  DateTime      @default(now())
+  CartItem   CartItem[]
+}
+
+model Fabric {
+  id         Int           @id @default(autoincrement())
+  name       String
+  url        String
+  url2       String
+  price      Decimal       @db.Decimal(10, 2)
+  sale_price Decimal?      @db.Decimal(10, 2) // New optional field
+  sale       Boolean
+  category   String
+  status     ProductStatus
+  color      String
+  material   String
+  pattern    String
+  length     Float?
+  createdAt  DateTime      @default(now())
+  CartItem   CartItem[]
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  sessionId String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  CartItem  CartItem[]
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  cartId    String
+  garment   Garment? @relation(fields: [garmentId], references: [id])
+  garmentId Int?
+  fabric    Fabric?  @relation(fields: [fabricId], references: [id])
+  fabricId  Int?
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cartId, garmentId, fabricId])
+  @@index([cartId, garmentId, fabricId])
+}
+
+enum ProductStatus {
+  LISTED
+  UNLISTED
+}

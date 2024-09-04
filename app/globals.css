@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.grayscale {
+  filter: grayscale(100%);
+}
+
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.toggle-success-error {
+  /* Base styles from .toggle */
+  flex-shrink: 0;
+  --tglbg: var(--fallback-b1,oklch(var(--b1)/1));
+  --handleoffset: 1.5rem;
+  --handleoffsetcalculator: calc(var(--handleoffset) * -1);
+  --togglehandleborder: 0 0;
+  height: 1.5rem;
+  width: 3rem;
+  cursor: pointer;
+  appearance: none;
+  border-radius: var(--rounded-badge, 1.9rem);
+  border-width: 1px;
+  transition: background, box-shadow var(--animation-input, 0.2s) ease-out;
+
+  /* Unchecked state (error) */
+  border-color: var(--fallback-er,oklch(var(--er)/var(--tw-border-opacity)));
+  --tw-border-opacity: 1;
+  background-color: var(--fallback-er,oklch(var(--er)/var(--tw-bg-opacity)));
+  --tw-bg-opacity: 1;
+  color: var(--fallback-erc,oklch(var(--erc)/var(--tw-text-opacity)));
+  --tw-text-opacity: 1;
+  box-shadow: var(--handleoffsetcalculator) 0 0 2px var(--tglbg) inset, 0 0 0 2px var(--tglbg) inset, var(--togglehandleborder);
+}
+
+.toggle-success-error:focus-visible {
+  outline-style: solid;
+  outline-width: 2px;
+  outline-offset: 2px;
+  outline-color: var(--fallback-er,oklch(var(--er)/1));
+}
+
+.toggle-success-error:checked,
+.toggle-success-error[aria-checked="true"] {
+  /* Checked state (success) */
+  border-color: var(--fallback-su,oklch(var(--su)/var(--tw-border-opacity)));
+  --tw-border-opacity: 0.1;
+  background-color: var(--fallback-su,oklch(var(--su)/var(--tw-bg-opacity)));
+  --tw-bg-opacity: 1;
+  color: var(--fallback-suc,oklch(var(--suc)/var(--tw-text-opacity)));
+  --tw-text-opacity: 1;
+  --handleoffsetcalculator: var(--handleoffset);
+}
+
+.toggle-success-error:checked:focus-visible,
+.toggle-success-error[aria-checked="true"]:focus-visible {
+  outline-color: var(--fallback-su,oklch(var(--su)/1));
+}
+
+/* RTL support */
+[dir="rtl"] .toggle-success-error {
+  --handleoffsetcalculator: calc(var(--handleoffset) * 1);
+}
+
+[dir="rtl"] .toggle-success-error:checked,
+[dir="rtl"] .toggle-success-error[aria-checked="true"] {
+  --handleoffsetcalculator: calc(var(--handleoffset) * -1);
+}
